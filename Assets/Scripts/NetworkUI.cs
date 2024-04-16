@@ -24,6 +24,7 @@ public class NetworkUI : NetworkBehaviour
             NetworkManager.Singleton.StartClient();
         });
     }
+
     private void Update()
     {
         playersCountText.text = "Players: " + playersNum.Value.ToString();
