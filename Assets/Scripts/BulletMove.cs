@@ -5,34 +5,47 @@ using UnityEngine.InputSystem;
 using Unity.Netcode;
 using TMPro;
 using Unity.Collections;
+using UnityEngine.UIElements;
 
 public class BulletMove : NetworkBehaviour
 {
-    [SerializeField] private GameObject hitparticles;
     [SerializeField] private float shootForce;
     [SerializeField] private float life;
     
     public WeaponManager parent;
     Rigidbody rb;
+    Vector3 velocity;
+    bool despawnInstructionSent = false;
 
-    // Start is called before the first frame update
-    void Start()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+
         rb = GetComponent<Rigidbody>();
+        velocity = rb.transform.up * shootForce;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        rb.velocity = rb.transform.up * shootForce;
+        transform.position += velocity * Time.deltaTime;
         life -= Time.deltaTime;
-        if(life<=0)
-            parent.DestroyServerRpc();
+        if(life<=0&&!despawnInstructionSent) {
+            DestroyServerRpc();
+            despawnInstructionSent = true;
+        }
     }
 
     private void OnTriggerEnter(Collider other) {
         if(!IsOwner) return;
 
-        parent.DestroyServerRpc();
+        if(parent == other)
+
+        DestroyServerRpc();
+    }
+
+    [ServerRpc]
+    public void DestroyServerRpc() {
+        GetComponent<NetworkObject>().Despawn();
+        Destroy(gameObject);
     }
 }

@@ -8,6 +8,7 @@ using Unity.Collections;
 
 public class WeaponManager : NetworkBehaviour
 {
+    [SerializeField] private GameObject Bullet;
     [SerializeField] private Transform HipFirePos;
     [SerializeField] private Transform ADSPos;
     [SerializeField] private Transform gunParent;
@@ -44,21 +45,12 @@ public class WeaponManager : NetworkBehaviour
         }
     }
     
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void ShootServerRpc() {//+(gunParent.forward*.25f)
-        GameObject go = Instantiate(currentWeapon.bullet, gunParent.position+(gunParent.forward*.25f), gunParent.rotation*Quaternion.Euler(90,0,0));
+        GameObject go = Instantiate(Bullet, gunParent.position+(gunParent.forward*.25f), gunParent.rotation*Quaternion.Euler(90,0,0));
         spawnedBullets.Add(go);
-        Debug.Log("here");
 
         go.GetComponent<BulletMove>().parent = this;
         go.GetComponent<NetworkObject>().Spawn();
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void DestroyServerRpc() {
-        GameObject toDestroy = spawnedBullets[0];
-        toDestroy.GetComponent<NetworkObject>().Despawn();
-        spawnedBullets.Remove(toDestroy);
-        Destroy(toDestroy);
     }
 }

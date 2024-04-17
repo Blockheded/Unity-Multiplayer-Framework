@@ -170,12 +170,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ef7354aab994471bc0fea306e77e3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Bullet: {fileID: 1507969970602211870, guid: b7b563a5d97874bf1a7f92fcf59add74, type: 3}
   HipFirePos: {fileID: 8580986835090464013}
   ADSPos: {fileID: 7965602161597719615}
   gunParent: {fileID: 8809242734002347391}
   aimSpeed: 10
   aimRotSpeed: 10
   currentWeapon: {fileID: 7168360877318628226}
+  spawnedBullets: []
 --- !u!1 &1150032923932530998
 GameObject:
   m_ObjectHideFlags: 0
