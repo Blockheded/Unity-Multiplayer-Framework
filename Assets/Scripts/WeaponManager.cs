@@ -46,7 +46,7 @@ public class WeaponManager : NetworkBehaviour
     }
     
     [ServerRpc(RequireOwnership = false)]
-    private void ShootServerRpc() {//+(gunParent.forward*.25f)
+    private void ShootServerRpc() {
         GameObject go = Instantiate(Bullet, gunParent.position+(gunParent.forward*.25f), gunParent.rotation*Quaternion.Euler(90,0,0));
         spawnedBullets.Add(go);
 

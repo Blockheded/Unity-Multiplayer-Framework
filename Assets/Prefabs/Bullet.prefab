@@ -99,7 +99,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 136
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 119
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 158171266
+  GlobalObjectIdHash: 1435082377
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -171,7 +171,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebfcdf0c3910942bea84ce8272a86e03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitparticles: {fileID: 0}
   shootForce: 40
   life: 1
   parent: {fileID: 0}

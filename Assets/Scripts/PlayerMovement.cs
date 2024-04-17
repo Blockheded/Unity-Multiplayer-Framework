@@ -38,7 +38,7 @@ public class PlayerMovement : NetworkBehaviour
             FPSCAM.GetComponent<Camera>().enabled = false;
             return;
         }
-        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
 
         jumpcount = 0;
         controller = GetComponent<CharacterController>();
@@ -47,11 +47,11 @@ public class PlayerMovement : NetworkBehaviour
     // Update is called once per frame
     void Update() {
         if(Input.GetKeyDown(KeyCode.Escape)&&Cursor.lockState == CursorLockMode.None) {
-            //Cursor.lockState = CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.Locked;
         } else if(Input.GetKeyDown(KeyCode.Escape)&&Cursor.lockState == CursorLockMode.Locked)
         {
-            //Cursor.lockState = CursorLockMode.None;
-            //Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
         
         if(!IsOwner) return;
@@ -100,5 +100,9 @@ public class PlayerMovement : NetworkBehaviour
     private void UpdatePositionServerRpc()
     {
         transform.position = new Vector3(Random.Range(POS_RANGE, -POS_RANGE), 2, Random.Range(POS_RANGE, -POS_RANGE));
+    }
+
+    public void TakeDamage() {
+        Debug.Log("Take Damage");
     }
 }

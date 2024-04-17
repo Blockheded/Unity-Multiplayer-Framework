@@ -31,20 +31,24 @@ public class BulletMove : NetworkBehaviour
         life -= Time.deltaTime;
         if(life<=0&&!despawnInstructionSent) {
             DestroyServerRpc();
-            despawnInstructionSent = true;
         }
     }
 
     private void OnTriggerEnter(Collider other) {
         if(!IsOwner) return;
 
-        if(parent == other)
+        if(other.tag == "Player"&&other.transform.gameObject!=parent.gameObject) {
+            other.transform.gameObject.GetComponent<PlayerMovement>().TakeDamage();
+        }
 
-        DestroyServerRpc();
+        if(!despawnInstructionSent) {
+            DestroyServerRpc();
+        }
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void DestroyServerRpc() {
+        despawnInstructionSent = true;
         GetComponent<NetworkObject>().Despawn();
         Destroy(gameObject);
     }
