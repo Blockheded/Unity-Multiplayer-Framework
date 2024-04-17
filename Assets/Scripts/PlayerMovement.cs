@@ -7,6 +7,7 @@ public class PlayerMovement : NetworkBehaviour
 {
     [SerializeField] private Transform playerRoot;
     [SerializeField] private Transform playerCam;
+    [SerializeField] private Transform FPSCAM;
     [SerializeField] private float POS_RANGE;
 
     [SerializeField] private float camSense;
@@ -34,6 +35,7 @@ public class PlayerMovement : NetworkBehaviour
         if(!IsOwner)
         {
             playerCam.GetComponent<Camera>().enabled = false;
+            FPSCAM.GetComponent<Camera>().enabled = false;
             return;
         }
         Cursor.lockState = CursorLockMode.Locked;
@@ -57,7 +59,7 @@ public class PlayerMovement : NetworkBehaviour
         rotY -= mouseX*camSense;
         rotX = Mathf.Clamp(rotX-mouseY*camSense, -90f, 90f);
 
-        playerRoot.rotation = Quaternion.Euler(0, -rotY, 0);
+        playerRoot.rotation = Quaternion.Euler(0, -rotY+180, 0);
         playerCam.localRotation = Quaternion.Euler(rotX, 0, 0);
 
         //player move
