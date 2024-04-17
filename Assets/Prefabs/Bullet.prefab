@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 162625735165420018}
   - component: {fileID: 3226365895379540027}
   - component: {fileID: 335650062037421676}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ CapsuleCollider:
     m_Bits: 136
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 119
+    m_Bits: 887
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 1
@@ -128,10 +128,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 136
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 119
+    m_Bits: 887
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0

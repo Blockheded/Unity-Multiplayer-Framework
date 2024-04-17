@@ -19,6 +19,7 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] private float gravity;
     [SerializeField] private Transform feet;
     bool grounded;
+    float spawnCount;
     float jumpcount;
     Vector3 velocity;
     
@@ -32,6 +33,8 @@ public class PlayerMovement : NetworkBehaviour
 
     public void Start()
     {
+        spawnCount = .5f;
+        velocity = new Vector3(0, 0, 0);
         if(!IsOwner)
         {
             playerCam.GetComponent<Camera>().enabled = false;
@@ -44,19 +47,8 @@ public class PlayerMovement : NetworkBehaviour
         controller = GetComponent<CharacterController>();
     }
 
-    // Update is called once per frame
     void Update() {
-        if(Input.GetKeyDown(KeyCode.Escape)&&Cursor.lockState == CursorLockMode.None) {
-            Cursor.lockState = CursorLockMode.Locked;
-        } else if(Input.GetKeyDown(KeyCode.Escape)&&Cursor.lockState == CursorLockMode.Locked)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        
-        if(!IsOwner) return;
-        controller.Move(velocity*Time.deltaTime);
-        jumpcount -= Time.deltaTime;
+            if(!IsOwner) return;
 
         float horizontalin = Input.GetAxis("Horizontal");
         float verticalin = Input.GetAxis("Vertical");
@@ -70,23 +62,38 @@ public class PlayerMovement : NetworkBehaviour
         playerRoot.rotation = Quaternion.Euler(0, -rotY+180, 0);
         playerCam.localRotation = Quaternion.Euler(rotX, 0, 0);
 
-        //player move
-        Vector3 movevect = playerRoot.forward * verticalin + playerRoot.right * horizontalin;
-
-        controller.Move(movevect*(grounded ? speed : airspeed)*Time.deltaTime);
-
-        grounded = Physics.Raycast(feet.position, feet.TransformDirection(Vector3.down),.15f);
-
-        if(grounded&&jumpcount<=0) {
-            velocity = new Vector3(0,-3,0);
-        } else {
-            velocity -= Vector3.up*gravity*Time.deltaTime;
-            if(velocity.y < -gravity*.75f) {
-                velocity.y = -gravity*.75f;
+        if(Input.GetKeyDown(KeyCode.Escape)&&Cursor.lockState == CursorLockMode.None) {
+                Cursor.lockState = CursorLockMode.Locked;
+            } else if(Input.GetKeyDown(KeyCode.Escape)&&Cursor.lockState == CursorLockMode.Locked)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
-        }
 
-        if(Input.GetKeyDown("space")) Jump();
+        if(spawnCount<= 0) {
+            controller.Move(velocity*Time.deltaTime);
+            jumpcount -= Time.deltaTime;
+
+            //player move
+            Vector3 movevect = playerRoot.forward * verticalin + playerRoot.right * horizontalin;
+
+            controller.Move(movevect*(grounded ? speed : airspeed)*Time.deltaTime);
+
+            grounded = Physics.Raycast(feet.position, feet.TransformDirection(Vector3.down),.15f);
+
+            if(grounded&&jumpcount<=0) {
+                velocity = new Vector3(0,-3,0);
+            } else {
+                velocity -= Vector3.up*gravity*Time.deltaTime;
+                if(velocity.y < -gravity*.75f) {
+                    velocity.y = -gravity*.75f;
+                }
+            }
+
+            if(Input.GetKeyDown("space")) Jump();
+        } else {
+            spawnCount -= Time.deltaTime;
+        }
     }
 
     void Jump() {
@@ -99,7 +106,7 @@ public class PlayerMovement : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void UpdatePositionServerRpc()
     {
-        transform.position = new Vector3(Random.Range(POS_RANGE, -POS_RANGE), 2, Random.Range(POS_RANGE, -POS_RANGE));
+        transform.position = new Vector3(Random.Range(POS_RANGE, -POS_RANGE), 8, Random.Range(POS_RANGE, -POS_RANGE));
     }
 
     public void TakeDamage() {

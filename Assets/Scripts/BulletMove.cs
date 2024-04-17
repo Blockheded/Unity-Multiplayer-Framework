@@ -17,7 +17,7 @@ public class BulletMove : NetworkBehaviour
     Vector3 velocity;
     bool despawnInstructionSent = false;
 
-    public override void OnNetworkSpawn()
+    void Start()
     {
         base.OnNetworkSpawn();
 
@@ -30,26 +30,22 @@ public class BulletMove : NetworkBehaviour
         transform.position += velocity * Time.deltaTime;
         life -= Time.deltaTime;
         if(life<=0&&!despawnInstructionSent) {
-            DestroyServerRpc();
+            DestroyBullet();
         }
     }
 
     private void OnTriggerEnter(Collider other) {
-        if(!IsOwner) return;
-
-        if(other.tag == "Player"&&other.transform.gameObject!=parent.gameObject) {
-            other.transform.gameObject.GetComponent<PlayerMovement>().TakeDamage();
+        if(other.tag == "Player"&&other.transform.gameObject!=parent.gameObject&&other.transform.parent!=null) {
+            other.transform.parent.gameObject.GetComponent<PlayerMovement>().TakeDamage();
         }
 
         if(!despawnInstructionSent) {
-            DestroyServerRpc();
+            DestroyBullet();
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void DestroyServerRpc() {
+    public void DestroyBullet() {
         despawnInstructionSent = true;
-        GetComponent<NetworkObject>().Despawn();
         Destroy(gameObject);
     }
 }

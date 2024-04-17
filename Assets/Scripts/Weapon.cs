@@ -6,7 +6,7 @@ using Unity.Netcode;
 public class Weapon : MonoBehaviour
 {
     [SerializeField] public GameObject bullet;
-    [SerializeField] private string name;
+    [SerializeField] private string weaponName;
     [SerializeField] private int ID;
     [SerializeField] public FireMode fireMode;
     public float shootWait;

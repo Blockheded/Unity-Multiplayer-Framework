@@ -15,7 +15,6 @@ public class WeaponManager : NetworkBehaviour
     [SerializeField] private float aimSpeed;
     [SerializeField] private float aimRotSpeed;
     [SerializeField] private Weapon currentWeapon;
-    [SerializeField] private List<GameObject> spawnedBullets = new List<GameObject>();
 
     bool isAiming;
     bool isShooting;
@@ -39,18 +38,28 @@ public class WeaponManager : NetworkBehaviour
                 case FireMode.Semi: {
                     currentWeapon.shootWait = 0.2f;
                     ShootServerRpc();
+                    CreateBullet();
                     break;
                 }
             }
         }
     }
     
-    [ServerRpc(RequireOwnership = false)]
-    private void ShootServerRpc() {
-        GameObject go = Instantiate(Bullet, gunParent.position+(gunParent.forward*.25f), gunParent.rotation*Quaternion.Euler(90,0,0));
-        spawnedBullets.Add(go);
+    [ServerRpc]
+    public void ShootServerRpc() {
+        ShootClientRpc();
+    }
 
+    [ClientRpc]
+    public void ShootClientRpc() {
+        if(!IsOwner) {
+            CreateBullet();
+        }
+    }
+
+    public void CreateBullet() {
+        GameObject go = Instantiate(Bullet, gunParent.position+(gunParent.forward*.25f), gunParent.rotation*Quaternion.Euler(90,0,0));
         go.GetComponent<BulletMove>().parent = this;
-        go.GetComponent<NetworkObject>().Spawn();
+        //go.GetComponent<NetworkObject>().Spawn();
     }
 }

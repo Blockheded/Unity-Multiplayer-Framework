@@ -213,8 +213,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 1507969970602211870, guid: b7b563a5d97874bf1a7f92fcf59add74, type: 3}
-  name: Pistol
+  weaponName: Pistol
   ID: 0
   fireMode: 0
-  shootWait: 0
+  shootWait: 0.1
   canShoot: 0

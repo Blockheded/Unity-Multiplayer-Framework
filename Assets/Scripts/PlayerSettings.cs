@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.Netcode;
 using TMPro;
 using Unity.Collections;
+using System;
 
 public class PlayerSettings : NetworkBehaviour
 {
@@ -22,8 +23,8 @@ public class PlayerSettings : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        networkPlayerName.Value = "Player: " + (OwnerClientId + 1);
+        networkPlayerName.Value = "Player " + (OwnerClientId + 1);
         playerName.text = networkPlayerName.Value.ToString();
-        meshRenderer.material.color = colors[(int)OwnerClientId];
+        meshRenderer.material.color = colors[Math.Min((int)OwnerClientId,colors.Count-1)];
     }
 }
